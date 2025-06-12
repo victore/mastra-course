@@ -1,9 +1,24 @@
 import { Agent } from "@mastra/core";
+import { MCPClient } from "@mastra/mcp";
 import { openai } from "@ai-sdk/openai";
 import { Memory } from "@mastra/memory";
 import { LibSQLStore } from "@mastra/libsql";
 import { getTransactionsTool } from "../tools";
 
+const mcp = new MCPClient({
+  servers: {
+    // "mcp.serve.file": new MCPFileServer
+  }
+});
+
+const mcpTools = await mcp.getTools();
+
+export const personalAssistantAgent = new Agent({
+  name: "Personal Assistant",
+  instructions: `You are a helpful personal assistant that can help with various tasks.> > Keep your responses concise and friendly.`,
+  model: openai("gpt-4o"),
+  tools: { ...mcpTools }, // Add MCP tools to your agent
+});
 
 export const financialAgent = new Agent({
     name: "Financial Assistant Agent",
@@ -44,4 +59,4 @@ export const financialAgent = new Agent({
       url: "file:../../memory.db", // local file-system database. Location is relative to the output directory `.mastra/output`
     }),
   }), // Add memory here
-  });
+});

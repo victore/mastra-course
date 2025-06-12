@@ -1,8 +1,9 @@
 import { Mastra } from '@mastra/core';
-import { financialAgent } from "./agents";
+import { personalAssistantAgent, financialAgent } from "./agents";
 
 export const mastra: Mastra = new Mastra({
   agents: {
+    personalAssistantAgent,
     financialAgent,
   },
 });
